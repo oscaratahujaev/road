@@ -69,12 +69,11 @@ class Db extends Model
                     return Yii::$app->response->redirect(['db/index']);
                 }
 
-//                debug('mysqldump --host=' . $this->getDsnAttribute('host', $db->dsn) . ' --user=' . $db->username . ' --password=' . $db->password . ' ' . $this->getDsnAttribute('dbname', $db->dsn) . ' --skip-add-locks > ' . $filePath);
-//                exit();
-
                 //Экранируем скобку которая есть в пароле
                 $db->password = str_replace("(", '\(', $db->password);
-                exec('mysqldump --host=' . $this->getDsnAttribute('host', $db->dsn) . ' --user=' . $db->username . ' --password=' . $db->password . ' ' . $this->getDsnAttribute('dbname', $db->dsn) . ' --skip-add-locks > ' . $filePath);
+                $res = exec('mysqldump --host=' . $this->getDsnAttribute('host', $db->dsn) . ' --user=' . $db->username . ' --password=' . $db->password . ' ' . $this->getDsnAttribute('dbname', $db->dsn) . ' --skip-add-locks > ' . $filePath);
+                debug($res);
+                exit;
                 Yii::$app->session->setFlash('success', 'Экспорт успешно завершен. Файл "' . $fileName . '" в папке ' . $path);
             } else {
                 Yii::$app->session->setFlash('error', 'Путь должен быть папкой.');
