@@ -1,0 +1,340 @@
+<?php
+
+namespace app\modules\admin\controllers;
+
+use common\components\Functions;
+use common\models\Reports;
+use common\models\UserReports;
+use app\modules\admin\components\Configs;
+use app\modules\admin\models\AuthItem;
+use app\modules\admin\models\Role;
+use Yii;
+use app\modules\admin\models\form\Login;
+use app\modules\admin\models\form\PasswordResetRequest;
+use app\modules\admin\models\form\ResetPassword;
+use app\modules\admin\models\form\Signup;
+use app\modules\admin\models\form\ChangePassword;
+use common\models\User;
+use app\modules\admin\models\searchs\User as UserSearch;
+use yii\base\InvalidParamException;
+use yii\helpers\Json;
+use yii\helpers\Url;
+use yii\web\BadRequestHttpException;
+use yii\web\Controller;
+use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
+use yii\base\UserException;
+use yii\mail\BaseMailer;
+
+/**
+ * User controller
+ */
+class UserController extends Controller
+{
+    private $_oldMailPath;
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['post'],
+                    'logout' => ['post'],
+                    'activate' => ['post'],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeAction($action)
+    {
+        if (parent::beforeAction($action)) {
+            if (Yii::$app->has('mailer') && ($mailer = Yii::$app->getMailer()) instanceof BaseMailer) {
+                /* @var $mailer BaseMailer */
+                $this->_oldMailPath = $mailer->getViewPath();
+                $mailer->setViewPath('@app/modules/admin/mail');
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function afterAction($action, $result)
+    {
+        if ($this->_oldMailPath !== null) {
+            Yii::$app->getMailer()->setViewPath($this->_oldMailPath);
+        }
+        return parent::afterAction($action, $result);
+    }
+
+    /**
+     * Lists all User models.
+     * @return mixed
+     */
+    public function actionIndex()
+    {
+        $searchModel = new UserSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionUpdate($id)
+    {
+        $request = Yii::$app->request;
+
+        $user = $this->findModel($id);
+
+        $role = Role::find()->where(['user_id' => $id])->one();
+
+        if ($role == null) {
+            $role = new Role();
+            $role->user_id = $user->id;
+        }
+
+
+        if (!$user) {
+            return $this->redirect(['/admin/user']);
+        }
+
+        if ($user->load($request->post())
+            && $role->load($request->post())
+            && $user->save()
+        ) {
+
+            $role->created_at = time();
+            $role->save(false);
+
+            Yii::$app->session->setFlash('success', Yii::t('main', User::MESSAGE_UPDATED));
+            return $this->redirect(Url::to(['/admin/user']));
+
+        } else {
+            //                        var_dump($user->load($request->post()));
+            //                        var_dump($role->load($request->post()));
+            //                        var_dump($user->getErrors());
+            //                        exit;
+        }
+
+        return $this->render('update', [
+            'user' => $user,
+            'role' => $role,
+        ]);
+
+    }
+
+    public function actionAssign()
+    {
+        $reports = Yii::$app->getRequest()->post('routes', []);
+        $user_id = Yii::$app->getRequest()->post('user_id');
+
+        foreach ($reports as $report) {
+            $model = new UserReports();
+            $model->user_id = $user_id;
+            $model->report_id = $report;
+            $model->save();
+        }
+        Yii::$app->getResponse()->format = 'json';
+        return Reports::getList($user_id);
+    }
+
+    public function actionRemove()
+    {
+        $reports = Yii::$app->getRequest()->post('routes', []);
+        $user_id = Yii::$app->getRequest()->post('user_id');
+
+        //        var_dump($reports);
+        UserReports::deleteAll(['in', 'report_id', $reports]);
+
+        Yii::$app->getResponse()->format = 'json';
+        //        $user = UserReports::find()->where(['user_id'=>$user_id])->all();
+        return Reports::getList($user_id);
+    }
+
+
+    /**
+     * Displays a single User model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionView($id)
+    {
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
+    /**
+     * Deletes an existing User model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionDelete($id)
+    {
+        $this->findModel($id)->delete();
+
+        return $this->redirect(['index']);
+    }
+
+    /**
+     * Login
+     * @return string
+     */
+    //    public function actionLogin()
+    //    {
+    //        if (!Yii::$app->getUser()->isGuest) {
+    //            return $this->goHome();
+    //        }
+    //
+    //        $model = new Login();
+    //        if ($model->load(Yii::$app->getRequest()->post()) && $model->login()) {
+    //            return $this->goBack();
+    //        } else {
+    //            return $this->render('login', [
+    //                'model' => $model,
+    //            ]);
+    //        }
+    //    }
+
+    /**
+     * Logout
+     * @return string
+     */
+    //    public function actionLogout()
+    //    {
+    //        Yii::$app->getUser()->logout();
+    //
+    //        return $this->goHome();
+    //    }
+    //
+    //    /**
+    //     * Signup new user
+    //     * @return string
+    //     */
+    //    public function actionSignup()
+    //    {
+    //        $model = new Signup();
+    //        if ($model->load(Yii::$app->getRequest()->post())) {
+    //            if ($user = $model->signup()) {
+    //                return $this->goHome();
+    //            }
+    //        }
+    //
+    //        return $this->render('signup', [
+    //            'model' => $model,
+    //        ]);
+    //    }
+    //
+    //    /**
+    //     * Request reset password
+    //     * @return string
+    //     */
+    //    public function actionRequestPasswordReset()
+    //    {
+    //        $model = new PasswordResetRequest();
+    //        if ($model->load(Yii::$app->getRequest()->post()) && $model->validate()) {
+    //            if ($model->sendEmail()) {
+    //                Yii::$app->getSession()->setFlash('success', 'Check your email for further instructions.');
+    //
+    //                return $this->goHome();
+    //            } else {
+    //                Yii::$app->getSession()->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
+    //            }
+    //        }
+    //
+    //        return $this->render('requestPasswordResetToken', [
+    //            'model' => $model,
+    //        ]);
+    //    }
+    //
+    //    /**
+    //     * Reset password
+    //     * @return string
+    //     */
+    //    public function actionResetPassword($token)
+    //    {
+    //        try {
+    //            $model = new ResetPassword($token);
+    //        } catch (InvalidParamException $e) {
+    //            throw new BadRequestHttpException($e->getMessage());
+    //        }
+    //
+    //        if ($model->load(Yii::$app->getRequest()->post()) && $model->validate() && $model->resetPassword()) {
+    //            Yii::$app->getSession()->setFlash('success', 'New password was saved.');
+    //
+    //            return $this->goHome();
+    //        }
+    //
+    //        return $this->render('resetPassword', [
+    //            'model' => $model,
+    //        ]);
+    //    }
+    //
+    //    /**
+    //     * Reset password
+    //     * @return string
+    //     */
+    //    public function actionChangePassword()
+    //    {
+    //        $model = new ChangePassword();
+    //        if ($model->load(Yii::$app->getRequest()->post()) && $model->change()) {
+    //            return $this->goHome();
+    //        }
+    //
+    //        return $this->render('change-password', [
+    //            'model' => $model,
+    //        ]);
+    //    }
+    //
+    //    /**
+    //     * Activate new user
+    //     * @param integer $id
+    //     * @return type
+    //     * @throws UserException
+    //     * @throws NotFoundHttpException
+    //     */
+    //    public function actionActivate($id)
+    //    {
+    //        /* @var $user User */
+    //        $user = $this->findModel($id);
+    //        if ($user->status == User::STATUS_INACTIVE) {
+    //            $user->status = User::STATUS_ACTIVE;
+    //            if ($user->save()) {
+    //                return $this->goHome();
+    //            } else {
+    //                $errors = $user->firstErrors;
+    //                throw new UserException(reset($errors));
+    //            }
+    //        }
+    //        return $this->goHome();
+    //    }
+    //
+    /**
+     * Finds the User model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return User the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = User::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+}
