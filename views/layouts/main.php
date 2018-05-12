@@ -26,7 +26,7 @@ MainAsset::register($this);
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class="hold-transition skin-black-light sidebar-mini layout-boxed"><!-- skin-black-light-->
+<body class="hold-transition skin-black-light sidebar-mini"><!-- skin-black-light-->
 <?php $this->beginBody() ?>
 
 
