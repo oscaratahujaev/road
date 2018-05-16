@@ -6,10 +6,12 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Event */
 /* @var $sectorDetail app\models\EventSectorDetail[] */
+/* @var $eventTasks app\models\Eventtask[] */
 
 $this->title = 'Тадбир: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('yii', 'Тадбирлар'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$taskNumber = 1;
 ?>
 <div class="event-view">
 
@@ -29,14 +31,14 @@ $this->params['breadcrumbs'][] = $this->title;
         <th>Амалга ошириш муддатлари</th>
         <th>Масъул ижрочилар</th>
         <tbody>
-        <?php for ($i = 1; $i <= 4; $i++): ?>
+        <?php for ($sector = 1; $sector <= 4; $sector++): ?>
             <tr>
                 <td colspan="7">
                     <div style="overflow:hidden" class="table-padding">
 
-                        <p class="text-center text-bold"><?= $i ?>-сектор бўйича
+                        <p class="text-center text-bold"><?= $sector ?>-сектор бўйича
 
-                            <?= Html::a('Тадбир қўшиш <i class="fa fa-plus"></i>', ['event-task/create', 'eventId' => $model->id], [
+                            <?= Html::a('Тадбир қўшиш <i class="fa fa-plus"></i>', ['event-task/create', 'eventId' => $model->id, 'sector' => $sector], [
                                 'data-toggle' => 'tooltip',
                                 'class' => 'btn btn-success pull-right',
                             ]) ?>
@@ -51,12 +53,29 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $this->render('sector_detail', [
                             'model' => $model,
                             'sectorDetail' => $sectorDetail,
-                            'i' => $i,
+                            'i' => $sector,
                         ]) ?>
 
                     </div>
                 </td>
             </tr>
+
+            <?php foreach ($eventTasks as $task): ?>
+                <?php if ($task['sector'] == $sector): ?>
+                    <tr>
+                        <td><?= $taskNumber ?></td>
+                        <td><?= implode(",", json_decode($task['mahalla'])) ?></td>
+                        <td><?= $task['title'] ?></td>
+                        <td><?= $task['realiz_mechanism'] ?></td>
+                        <td></td>
+                        <td><?= $task['deadline_date'] ?></td>
+                        <td></td>
+                    </tr>
+                    <?php $taskNumber++; ?>
+                <?php endif; ?>
+
+            <?php endforeach; ?>
+
         <?php endfor; ?>
 
         </tbody>

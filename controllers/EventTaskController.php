@@ -2,9 +2,12 @@
 
 namespace app\controllers;
 
+use app\models\ref\RefMahalla;
+use app\models\ref\RefSector;
 use Yii;
 use app\models\EventTask;
 use app\models\search\EventTaskSearch;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -62,10 +65,27 @@ class EventTaskController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate($eventId)
+    public function actionCreate($eventId, $sector)
     {
         $model = new EventTask();
         $model->event_id = $eventId;
+
+
+        // Identifying mahalla for sector
+
+        $sector = RefSector::find()->where([
+            'sector_number' => $sector,
+            'district_id' => Yii::$app->user->identity->detail->district_id
+        ])->asArray()->one();
+        if (empty($sector)) {
+            Yii::$app->session->setFlash('Сиз туманга бириктирилмагансиз');
+            return $this->redirect(['/event/view', 'id' => $eventId]);
+        }
+        $mahalla = ArrayHelper::map(RefMahalla::findAll(['sector_id' => $sector['id']]), 'id', 'name');
+
+
+        /*******************************************/
+        $model->sector = $sector['sector_number'];
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['/event/view', 'id' => $eventId]);
@@ -74,6 +94,7 @@ class EventTaskController extends Controller
         return $this->render('create', [
             'model' => $model,
             'eventId' => $eventId,
+            'mahalla' => $mahalla,
         ]);
     }
 

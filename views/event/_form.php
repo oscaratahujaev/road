@@ -29,11 +29,17 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'event_type_id')->dropDownList(\yii\helpers\ArrayHelper::map(EventType::find()->all(), 'id', 'name')) ?>
 
 
-        <?= $form->field($model, 'deadline_type')->dropDownList(ArrayHelper::map(RefDeadlineType::find()->all(), 'id', 'name')) ?>
+        <?= $form->field($model, 'deadline_type')->dropDownList(
+            ArrayHelper::map(RefDeadlineType::find()->all(), 'id', 'name'),
+            [
+                'id' => 'deadline-type'
+            ]) ?>
 
         <div class="hidden" id="deadline">
             <?= $form->field($model, 'deadline')->widget(DatePicker::classname(), [
-                'options' => ['placeholder' => 'Санани танланг'],
+                'options' => [
+                    'placeholder' => 'Санани танланг',
+                ],
                 'pluginOptions' => [
                     'autoclose' => true
                 ]

@@ -10,9 +10,10 @@ use Yii;
  *
  * @property int $id
  * @property int $event_id
+ * @property int $sector
  * @property string $mahalla
  * @property int $category_id
- * @property string $title
+ * @property array $title
  * @property int $deadline_type
  * @property string $deadline_date
  * @property string $deadline_text
@@ -43,10 +44,10 @@ class EventTask extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['event_id', 'category_id', 'deadline_type', 'creator', 'created_at', 'modifier', 'modified_at'], 'integer'],
-            [['mahalla', 'title', 'deadline_text', 'realiz_mechanism'], 'string'],
-            [['title', 'deadline_type'], 'required'],
-            [['deadline_date'], 'safe'],
+            [['event_id', 'category_id', 'deadline_type', 'creator', 'created_at', 'modifier', 'modified_at', 'sector'], 'integer'],
+            [['deadline_text', 'realiz_mechanism'], 'string'],
+            [['title', 'deadline_type', 'mahalla','sector'], 'required'],
+            [['deadline_date', 'title'], 'safe'],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => RefCategory::className(), 'targetAttribute' => ['category_id' => 'id']],
             [['event_id'], 'exist', 'skipOnError' => true, 'targetClass' => Event::className(), 'targetAttribute' => ['event_id' => 'id']],
         ];
@@ -60,18 +61,46 @@ class EventTask extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('yii', 'ID'),
             'event_id' => Yii::t('yii', 'Event ID'),
-            'mahalla' => Yii::t('yii', 'Mahalla'),
-            'category_id' => Yii::t('yii', 'Category ID'),
-            'title' => Yii::t('yii', 'Title'),
-            'deadline_type' => Yii::t('yii', 'Deadline Type'),
-            'deadline_date' => Yii::t('yii', 'Deadline Date'),
-            'deadline_text' => Yii::t('yii', 'Deadline Text'),
-            'realiz_mechanism' => Yii::t('yii', 'Realiz Mechanism'),
+            'mahalla' => Yii::t('yii', 'Махаллалар'),
+            'category_id' => Yii::t('yii', 'Категория'),
+            'title' => Yii::t('yii', 'Чора-тадбир номи'),
+            'deadline_type' => Yii::t('yii', 'Амалга ошириш муддати'),
+            'deadline_date' => Yii::t('yii', 'Сана'),
+            'deadline_text' => Yii::t('yii', ''),
+            'realiz_mechanism' => Yii::t('yii', 'Амалга ошириш механизми'),
             'creator' => Yii::t('yii', 'Creator'),
             'created_at' => Yii::t('yii', 'Created At'),
             'modifier' => Yii::t('yii', 'Modifier'),
             'modified_at' => Yii::t('yii', 'Modified At'),
         ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => \yii\behaviors\TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'modified_at',
+                'value' => function () {
+                    return time();
+                },
+            ],
+        ];
+    }
+
+
+    public function beforeSave($insert)
+    {
+
+        if ($this->isNewRecord) {
+            $this->creator = Yii::$app->user->id;
+        }
+        $this->modifier = Yii::$app->user->id;
+
+        $this->mahalla = json_encode($this->mahalla);
+
+        return parent::beforeSave($insert);
     }
 
     /**

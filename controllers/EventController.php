@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\EventSectorDetail;
+use app\models\EventTask;
 use Yii;
 use app\models\Event;
 use app\models\search\EventSearch;
@@ -55,12 +56,14 @@ class EventController extends Controller
     public function actionView($id)
     {
         $sectorDetail = EventSectorDetail::find()->where(['event_id' => $id])->indexBy('sector_number')->asArray()->all();
-//        debug($sectorDetail);
-//        exit;
 
+        $eventTasks = EventTask::findAll(['event_id' => $id]);
+//        debug($eventTasks);
+//        exit;
         return $this->render('view', [
             'model' => $this->findModel($id),
             'sectorDetail' => $sectorDetail,
+            'eventTasks' => $eventTasks,
         ]);
     }
 
