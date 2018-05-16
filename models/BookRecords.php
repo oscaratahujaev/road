@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "book_records".
@@ -52,6 +53,32 @@ class BookRecords extends \yii\db\ActiveRecord
             [['visit_place_owner', 'reason'], 'string', 'max' => 255],
             [['book_id'], 'exist', 'skipOnError' => true, 'targetClass' => Book::className(), 'targetAttribute' => ['book_id' => 'id']],
         ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'modified_at',
+                'value' => function () {
+                    return time();
+                },
+            ],
+        ];
+    }
+
+
+    public function beforeSave($insert)
+    {
+
+        if ($this->isNewRecord) {
+            $this->creator = Yii::$app->user->id;
+        }
+        $this->modifier = Yii::$app->user->id;
+
+        return parent::beforeSave($insert);
     }
 
     /**

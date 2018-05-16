@@ -1,5 +1,6 @@
 <?php
 
+use app\components\Functions;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -28,10 +29,18 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'region_id',
-            'district_id',
-            'sector_id',
+            [
+                'label' => 'Вилоят',
+                'value' => Functions::extractFromJson('uzc', $model->region->name),
+            ],
+            [
+                'label' => 'Туман',
+                'value' => Functions::extractFromJson('uzc', $model->district->name),
+            ],
+            [
+                'label' => 'Сектор',
+                'value' => Functions::extractFromJson('uzc', $model->sector->name),
+            ],
             'sector_head',
             'head_position',
             'head_workplace',
@@ -42,11 +51,17 @@ $this->params['breadcrumbs'][] = $this->title;
             'prosecutor_head',
             'affair_head',
             'tax_head',
-            'creator',
-            'created_at',
-            'modifier',
-            'modified_at',
         ],
     ]) ?>
 
+    <h1>
+        Book Records
+    </h1>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
 </div>

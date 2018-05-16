@@ -2,6 +2,7 @@
 
 namespace app\modules\reference\controllers;
 
+use app\components\Functions;
 use Yii;
 use app\models\ref\RefSector;
 use app\models\ref\search\RefSectorSearch;
@@ -27,6 +28,14 @@ class RefSectorController extends Controller
                 ],
             ],
         ];
+    }
+
+
+    public function actionSector($id)
+    {
+        $districts = Functions::getSector($id);
+        return json_encode($districts);
+
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace app\models\ref;
 
+use Book;
 use Yii;
 
 /**

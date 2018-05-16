@@ -2,6 +2,7 @@
 
 namespace app\modules\reference\controllers;
 
+use app\components\Functions;
 use Yii;
 use app\models\ref\RefDistrict;
 use app\models\ref\search\RefDistrictSearch;
@@ -27,6 +28,13 @@ class RefDistrictController extends Controller
                 ],
             ],
         ];
+    }
+
+
+    public function actionDistrict($id)
+    {
+        $districts = Functions::getDistricts($id);
+        return json_encode($districts);
     }
 
     /**
@@ -56,6 +64,7 @@ class RefDistrictController extends Controller
             'model' => $this->findModel($id),
         ]);
     }
+
 
     /**
      * Creates a new RefDistrict model.

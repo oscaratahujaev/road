@@ -6,6 +6,7 @@ use app\models\ref\RefDistrict;
 use app\models\ref\RefRegion;
 use app\models\ref\RefSector;
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "book".
@@ -57,6 +58,33 @@ class Book extends \yii\db\ActiveRecord
             [['sector_id'], 'exist', 'skipOnError' => true, 'targetClass' => RefSector::className(), 'targetAttribute' => ['sector_id' => 'id']],
         ];
     }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'modified_at',
+                'value' => function () {
+                    return time();
+                },
+            ],
+        ];
+    }
+
+
+    public function beforeSave($insert)
+    {
+
+        if ($this->isNewRecord) {
+            $this->creator = Yii::$app->user->id;
+        }
+        $this->modifier = Yii::$app->user->id;
+
+        return parent::beforeSave($insert);
+    }
+
 
     /**
      * {@inheritdoc}

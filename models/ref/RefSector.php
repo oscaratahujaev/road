@@ -2,6 +2,8 @@
 
 namespace app\models\ref;
 
+use app\models\Book;
+use app\models\EventSectorDetail;
 use Yii;
 
 /**

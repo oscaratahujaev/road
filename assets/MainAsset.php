@@ -28,6 +28,7 @@ class MainAsset extends AssetBundle
         'bower_components/fastclick/lib/fastclick.js',
         'dist/js/adminlte.min.js',
         'dist/js/demo.js',
+        'js/book.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
