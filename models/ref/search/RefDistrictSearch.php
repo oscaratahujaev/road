@@ -8,12 +8,12 @@ use yii\data\ActiveDataProvider;
 use app\models\ref\RefDistrict;
 
 /**
- * RefDistrictSearch represents the model behind the search form of `app\models\ref\RefDistrict`.
+ * RefDistrictSearch represents the model behind the search form about `app\models\ref\RefDistrict`.
  */
 class RefDistrictSearch extends RefDistrict
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function rules()
     {
@@ -24,7 +24,7 @@ class RefDistrictSearch extends RefDistrict
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function scenarios()
     {
@@ -43,8 +43,6 @@ class RefDistrictSearch extends RefDistrict
     {
         $query = RefDistrict::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -57,7 +55,6 @@ class RefDistrictSearch extends RefDistrict
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'region_id' => $this->region_id,

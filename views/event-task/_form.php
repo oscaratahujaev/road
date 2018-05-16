@@ -1,5 +1,8 @@
 <?php
 
+use app\models\ref\RefCategory;
+use kartik\widgets\Select2;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -12,11 +15,16 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'event_id')->textInput() ?>
+    <?= $form->field($model, 'mahalla')->widget(Select2::classname(), [
+        'data' => ArrayHelper::map(RefMahalla::find()->all(),'id','name'),
+        'language' => 'de',
+        'options' => ['placeholder' => 'Select a state ...'],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]); ?>
 
-    <?= $form->field($model, 'mahalla')->textarea(['rows' => 6]) ?>
-
-    <?= $form->field($model, 'category_id')->textInput() ?>
+    <?= $form->field($model, 'category_id')->dropDownList(ArrayHelper::map(RefCategory::find()->all(), 'id', 'name')) ?>
 
     <?= $form->field($model, 'title')->textarea(['rows' => 6]) ?>
 
@@ -28,16 +36,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'realiz_mechanism')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'creator')->textInput() ?>
-
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'modifier')->textInput() ?>
-
-    <?= $form->field($model, 'modified_at')->textInput() ?>
-
     <div class="form-group">
-        <?= Html::submitButton(Yii::t('yii', 'Save'), ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton(Yii::t('yii', 'Сақлаш'), ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

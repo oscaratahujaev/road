@@ -8,12 +8,12 @@ use yii\data\ActiveDataProvider;
 use app\models\ref\RefUnitMeasure;
 
 /**
- * RefUnitMeasureSearch represents the model behind the search form of `app\models\ref\RefUnitMeasure`.
+ * RefUnitMeasureSearch represents the model behind the search form about `app\models\ref\RefUnitMeasure`.
  */
 class RefUnitMeasureSearch extends RefUnitMeasure
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function rules()
     {
@@ -24,7 +24,7 @@ class RefUnitMeasureSearch extends RefUnitMeasure
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function scenarios()
     {
@@ -43,8 +43,6 @@ class RefUnitMeasureSearch extends RefUnitMeasure
     {
         $query = RefUnitMeasure::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -57,7 +55,6 @@ class RefUnitMeasureSearch extends RefUnitMeasure
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'creator' => $this->creator,

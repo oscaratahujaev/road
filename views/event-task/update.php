@@ -10,7 +10,7 @@ $this->title = Yii::t('yii', 'Update Event Task: ' . $model->title, [
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('yii', 'Event Tasks'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('yii', 'Update');
+$this->params['breadcrumbs'][] = Yii::t('yii', 'Ўзгартириш');
 ?>
 <div class="event-task-update">
 

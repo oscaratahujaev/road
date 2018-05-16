@@ -8,12 +8,12 @@ use yii\data\ActiveDataProvider;
 use app\models\ref\RefMahalla;
 
 /**
- * RefMahallaSearch represents the model behind the search form of `app\models\ref\RefMahalla`.
+ * RefMahallaSearch represents the model behind the search form about `app\models\ref\RefMahalla`.
  */
 class RefMahallaSearch extends RefMahalla
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function rules()
     {
@@ -24,7 +24,7 @@ class RefMahallaSearch extends RefMahalla
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function scenarios()
     {
@@ -43,8 +43,6 @@ class RefMahallaSearch extends RefMahalla
     {
         $query = RefMahalla::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -57,7 +55,6 @@ class RefMahallaSearch extends RefMahalla
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'sector_id' => $this->sector_id,

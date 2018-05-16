@@ -11,10 +11,9 @@ use yii\helpers\Url;
 $controller = Yii::$app->controller;
 $path = "/";
 
-$path .= $controller->module->id == "app-frontend" ? "" : $controller->module->id . "/";
+$path .= $controller->module->id == "basic" ? "" : $controller->module->id . "/";
 $path .= $controller->id . "/";
 $path .= $controller->action->id;
-
 ?>
 
 <aside class="main-sidebar">

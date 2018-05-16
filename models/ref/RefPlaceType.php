@@ -2,6 +2,7 @@
 
 namespace app\models\ref;
 
+use app\models\TaskPerformer;
 use Yii;
 
 /**
@@ -53,6 +54,33 @@ class RefPlaceType extends \yii\db\ActiveRecord
             'modified_at' => Yii::t('yii', 'Modified At'),
         ];
     }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => \yii\behaviors\TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'modified_at',
+                'value' => function () {
+                    return time();
+                },
+            ],
+        ];
+    }
+
+
+    public function beforeSave($insert)
+    {
+
+        if ($this->isNewRecord) {
+            $this->creator = Yii::$app->user->id;
+        }
+        $this->modifier = Yii::$app->user->id;
+
+        return parent::beforeSave($insert);
+    }
+
 
     /**
      * @return \yii\db\ActiveQuery

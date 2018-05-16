@@ -29,10 +29,10 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_ACTIVE = 10;
     const STATUS_INACTIVE = 1;
 
-    const MESSAGE_UPDATED = "Данные пользователя успешно сохранены";
-    const MESSAGE_NOT_REGISTERED = "Для входа в систему требуется регистрация";
-    const MESSAGE_NOT_CONFIRMED = 'Для входа в систему требуется активация вашего аккаунта. Обратитесь к администратору.';
-    const MESSAGE_REGISTERED_NOT_CONFIRMED = 'Вы успешно зарегистрировались. Для активации аккаунта обратитесь к администратору.';
+    const MESSAGE_UPDATED = "Муваффақиятли сақланди.";
+    const MESSAGE_NOT_REGISTERED = "Тизимга кириш учун рўухатдан ўтиш талаб этилади.";
+    const MESSAGE_NOT_CONFIRMED = 'Тизимга кириш учун администратор рухсатини олиш талаб этилади.';
+    const MESSAGE_REGISTERED_NOT_CONFIRMED = 'Сиз муваффакиятли рўйхатдан ўтдингиз. Тизимга кириш учун администратор рухсатини олиш талаб этилади.';
 
     /**
      * @inheritdoc
@@ -50,6 +50,7 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             [['auth_key', 'fullname'], 'safe'],
             [['status'], 'safe'],
+            [['status'], 'default', 'value' => self::STATUS_INACTIVE],
             [['created_at', 'updated_at'], 'safe'],
             [['password_hash', 'password_reset_token'], 'string', 'max' => 255],
             [['username',], 'string', 'max' => 100],
@@ -90,6 +91,14 @@ class User extends ActiveRecord implements IdentityInterface
             'updated_at' => 'Последний вход',
             'auth_key' => 'Auth Key',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDetail()
+    {
+        return $this->hasOne(UserDetail::className(), ['user_id' => 'id']);
     }
 
     public static function findIdentity($id)

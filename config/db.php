@@ -2,7 +2,7 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=road_map',
+    'dsn' => 'mysql:host=127.0.0.1;dbname=road_map',
     'username' => 'root',
     'password' => 'root',
     'charset' => 'utf8',

@@ -2,12 +2,14 @@
 
 namespace app\controllers;
 
+use app\models\EventSectorDetail;
 use Yii;
 use app\models\Event;
 use app\models\search\EventSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * EventController implements the CRUD actions for Event model.
@@ -52,8 +54,13 @@ class EventController extends Controller
      */
     public function actionView($id)
     {
+        $sectorDetail = EventSectorDetail::find()->where(['event_id' => $id])->indexBy('sector_number')->asArray()->all();
+//        debug($sectorDetail);
+//        exit;
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'sectorDetail' => $sectorDetail,
         ]);
     }
 
@@ -85,8 +92,9 @@ class EventController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $request = Yii::$app->request;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load($request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -94,6 +102,22 @@ class EventController extends Controller
             'model' => $model,
         ]);
     }
+
+    public function actionDisplayFile($id)
+    {
+        $model = $this->findModel($id);
+
+        header('Pragma: public');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Content-Transfer-Encoding: binary');
+        //        header('Content-length: '.$model->file_size);
+        header('Content-Type: ' . $model->basis_filetype);
+        header('Content-Disposition: attachment; filename=' . $model->basis_filename);
+
+        echo $model->basis_file;
+    }
+
 
     /**
      * Deletes an existing Event model.

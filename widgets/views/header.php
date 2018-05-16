@@ -13,9 +13,9 @@ use yii\helpers\Url;
     <!-- Logo -->
     <a href="<?= Url::to(['/']) ?>" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>Ф</b></span>
+        <span class="logo-mini"><b>ДК</b></span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>Фонд</b></span>
+        <span class="logo-lg"><b>Дорожная карта</b></span>
     </a>
     <!--    <div class="pinfl_info">-->
     <!--        <a type="button" class="" data-toggle="modal" data-target="#modal-default" href="#">-->

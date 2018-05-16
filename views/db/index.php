@@ -12,6 +12,7 @@ use yii\grid\GridView;
 
 $this->title = 'База данных';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="post-index">
 
@@ -32,17 +33,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Путь к дампу БД',
             ],
             [
-                'format'=>'raw',
-                'value' => function($data,$id){
-                    return Html::a('Импортировать в БД', \yii\helpers\Url::to(['db/import','path'=>$data['dump']]), ['title' => 'Импортировать','class' => 'btn btn-primary']);
+                'format' => 'raw',
+                'value' => function ($data, $id) {
+                    return Html::a('Импортировать в БД', \yii\helpers\Url::to(['db/import', 'path' => $data['dump']]), ['title' => 'Импортировать', 'class' => 'btn btn-primary']);
                 }
             ],
             [
-                'format'=>'raw',
+                'format' => 'raw',
                 //кнопку удаления выводим только если >1 дампа БД
-                'value' => function($data,$id){
-                    if(Yii::$app->params['count_db'] > 1){
-                        return Html::a('Удалить', \yii\helpers\Url::to(['db/delete','path'=>$data['dump']]), ['title' => 'Удалить','class' => 'btn btn-danger']);
+                'value' => function ($data, $id) {
+                    if (Yii::$app->params['count_db'] > 1) {
+                        return Html::a('Удалить', \yii\helpers\Url::to(['db/delete', 'path' => $data['dump']]), ['title' => 'Удалить', 'class' => 'btn btn-danger']);
                     } else return false;
                 }
             ],

@@ -10,7 +10,7 @@ $this->title = Yii::t('yii', 'Update Book: ' . $model->id, [
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('yii', 'Books'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('yii', 'Update');
+$this->params['breadcrumbs'][] = Yii::t('yii', 'Ўзгартириш');
 ?>
 <div class="book-update">
 

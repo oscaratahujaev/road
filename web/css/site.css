@@ -201,29 +201,9 @@ a.desc:after {
 div.required > label:after {
     content: " *";
     color: red;
+    font-weight: bold;
 }
 
-#voluntarily {
-    display: none;
-}
-
-.field-docregress-situationtypeid {
-    text-align: center;
-}
-
-#docregress-situationtypeid > label:first-child {
-    padding-right:32%;
-}
-
-.pinfl_info {
-    position: fixed;
-
-    border: 1px solid #000;
-    right: 20px;
-    top: 10px;
-}
-
-.pinfl_info a {
-    border: 1px solid #000;
-    border-radius: 50%;
+.table-padding {
+    padding: 20px 10px 20px 20px;
 }

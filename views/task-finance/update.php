@@ -10,7 +10,7 @@ $this->title = Yii::t('yii', 'Update Task Finance: ' . $model->id, [
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('yii', 'Task Finances'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('yii', 'Update');
+$this->params['breadcrumbs'][] = Yii::t('yii', 'Ўзгартириш');
 ?>
 <div class="task-finance-update">
 
