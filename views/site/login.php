@@ -6,10 +6,12 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\helpers\Url;
 
-$this->title = 'Login';
+$this->title = 'Тизимга кириш';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<?= \app\widgets\Alert::widget() ?>
 <div class="login-box-body">
     <?php $form = ActiveForm::begin(['id' => 'login-form', 'method' => 'post']); ?>
 
@@ -17,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::textInput('LoginForm[username]', '', [
             'autofocus' => true,
             'class' => 'form-control',
-            'placeholder' => 'username'
+            'placeholder' => 'Логин'
         ]) ?>
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
     </div>
@@ -26,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::passwordInput('LoginForm[password]', '', [
             'autofocus' => true,
             'class' => 'form-control',
-            'placeholder' => 'password'
+            'placeholder' => 'Парол'
         ]) ?>
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
     </div>
@@ -35,13 +37,13 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-xs-8">
             <div class="checkbox">
                 <label>
-                    <?= Html::checkbox('rememberMe', false) ?> Remember Me
+                    <?= Html::checkbox('rememberMe', false) ?> Эслаб қолиш
                 </label>
             </div>
         </div>
         <!-- /.col -->
         <div class="col-xs-4">
-            <?= Html::submitButton('Sign in', ['class' => 'btn btn-primary btn-block btn-flat']) ?>
+            <?= Html::submitButton('Кириш', ['class' => 'btn btn-primary btn-block btn-flat']) ?>
         </div>
         <!-- /.col -->
     </div>
@@ -49,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php ActiveForm::end(); ?>
 
-    <a href="#">I forgot my password</a><br>
-    <a href="register.html" class="text-center">Register a new membership</a>
-
+    <div class="font-small grey-text d-flex justify-content-center"><a
+                href="<?= Url::to(['signup']) ?>"
+                class="dark-grey-text font-weight-bold ml-1">Рўйхатдан ўтиш</a></div>
 </div>

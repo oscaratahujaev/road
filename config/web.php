@@ -7,6 +7,7 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'timezone' => 'Asia/Tashkent',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm' => '@vendor/npm-asset',
@@ -14,7 +15,7 @@ $config = [
     'modules' => [
         'admin' => [
             'class' => 'app\modules\admin\Module',
-                        'layout' => 'left-menu',
+            'layout' => 'left-menu',
             'mainLayout' => '@app/views/layouts/main.php',
         ],
         'reference' => [
@@ -22,9 +23,15 @@ $config = [
         ],
         'gridview' => [
             'class' => '\kartik\grid\Module'
+        ],
+        'datecontrol' => [
+            'class' => '\kartik\datecontrol\Module'
         ]
+
     ],
+    'language' => 'uz-UZ',
     'components' => [
+
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'jnTvj7-LWnI4SocnOBK7FZgdLs8tmMmO',

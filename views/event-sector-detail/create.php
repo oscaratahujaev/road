@@ -6,13 +6,11 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\EventSectorDetail */
 
-$this->title = Yii::t('yii', 'Create Event Sector Detail');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('yii', 'Event Sector Details'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = $sectorId."-сектор бйича дастурни амалга ошириш бўйича кутилаётган натижалар";
+$this->params['breadcrumbs'][] = ['label' => Yii::t('yii', 'Чора тадбир'), 'url' => ['/event/view','id'=>$eventId]];
+$this->params['breadcrumbs'][] = 'Натижа';
 ?>
 <div class="event-sector-detail-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
         'model' => $model,

@@ -43,7 +43,7 @@ class Db extends Model
                 Yii::$app->session->setFlash('error', 'Нет подключения к базе данных.');
             }
             //Экранируем скобку которая есть в пароле
-            $db->password = str_replace("(", "\(", $db->password);
+            $db->password = str_replace("(", '\(', $db->password);
             exec('mysql --host=' . $this->getDsnAttribute('host', $db->dsn) . ' --user=' . $db->username . ' --password=' . $db->password . ' ' . $this->getDsnAttribute('dbname', $db->dsn) . ' < ' . $path);
             Yii::$app->session->setFlash('success', 'Дамп ' . $path . ' успешно импортирован.');
         } else {
@@ -68,12 +68,9 @@ class Db extends Model
                     Yii::$app->session->setFlash('error', 'Нет подключения к базе данных.');
                     return Yii::$app->response->redirect(['db/index']);
                 }
-
                 //Экранируем скобку которая есть в пароле
                 $db->password = str_replace("(", '\(', $db->password);
-                $res = exec('mysqldump --host=' . $this->getDsnAttribute('host', $db->dsn) . ' --user=' . $db->username . ' --password=' . $db->password . ' ' . $this->getDsnAttribute('dbname', $db->dsn) . ' --skip-add-locks > ' . $filePath);
-                debug($res);
-                exit;
+                exec('mysqldump -u' . $db->username . ' -h' . $this->getDsnAttribute('host', $db->dsn) . ' -p' . $db->password . ' ' . $this->getDsnAttribute('dbname', $db->dsn) . ' --skip-add-locks > ' . $filePath);
                 Yii::$app->session->setFlash('success', 'Экспорт успешно завершен. Файл "' . $fileName . '" в папке ' . $path);
             } else {
                 Yii::$app->session->setFlash('error', 'Путь должен быть папкой.');

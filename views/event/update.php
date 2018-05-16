@@ -5,16 +5,13 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Event */
 
-$this->title = Yii::t('yii', 'Update Event: ' . $model->title, [
-    'nameAttribute' => '' . $model->title,
-]);
+$this->title = 'Тадбир: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('yii', 'Events'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('yii', 'Update');
+$this->params['breadcrumbs'][] = Yii::t('yii', 'Ўзгартириш');
 ?>
 <div class="event-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
         'model' => $model,

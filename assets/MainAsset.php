@@ -18,6 +18,7 @@ class MainAsset extends AssetBundle
         'dist/css/AdminLTE.min.css',
         'dist/css/skins/_all-skins.min.css',
         'plugins/pace/pace.min.css',
+        'css/site.css',
     ];
     public $js = [
         'js/html5shiv.min.js',
@@ -28,6 +29,7 @@ class MainAsset extends AssetBundle
         'bower_components/fastclick/lib/fastclick.js',
         'dist/js/adminlte.min.js',
         'dist/js/demo.js',
+        'js/main.js'
         'js/book.js',
     ];
     public $depends = [

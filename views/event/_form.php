@@ -1,5 +1,10 @@
 <?php
 
+use app\models\EventType;
+use app\models\ref\RefDeadlineType;
+use kartik\file\FileInput;
+use kartik\widgets\DatePicker;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -8,40 +13,58 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="event-form">
+<div class="row event-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+        'enableClientValidation' => true,
+    ]); ?>
 
-    <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+    <?= $form->errorSummary($model) ?>
 
-    <?= $form->field($model, 'realiz_mechanism')->textarea(['rows' => 6]) ?>
+    <div class="col-md-8">
+        <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'result')->textarea(['rows' => 6]) ?>
+        <?= $form->field($model, 'realiz_mechanism')->textarea(['rows' => 4]) ?>
 
-    <?= $form->field($model, 'basis_file')->textInput() ?>
+        <?= $form->field($model, 'event_type_id')->dropDownList(\yii\helpers\ArrayHelper::map(EventType::find()->all(), 'id', 'name')) ?>
 
-    <?= $form->field($model, 'deadline')->textInput() ?>
 
-    <?= $form->field($model, 'event_type_id')->textInput() ?>
+        <?= $form->field($model, 'deadline_type')->dropDownList(
+            ArrayHelper::map(RefDeadlineType::find()->all(), 'id', 'name'),
+            [
+                'id' => 'deadline-type'
+            ]) ?>
 
-    <?= $form->field($model, 'event_number')->textInput(['maxlength' => true]) ?>
+        <div class="hidden" id="deadline">
+            <?= $form->field($model, 'deadline')->widget(DatePicker::classname(), [
+                'options' => [
+                    'placeholder' => 'Санани танланг',
+                ],
+                'pluginOptions' => [
+                    'autoclose' => true
+                ]
+            ])->label(false) ?>
+        </div>
 
-    <?= $form->field($model, 'region_id')->textInput() ?>
+        <?php $district = \app\models\ref\RefDistrict::findOne(Yii::$app->user->identity->detail->district_id) ?>
+        <?= $form->field($model, 'responsible')->textInput(
+            [
+                'maxlength' => true,
+                'readonly' => $district->ceo_full_name ? true : false,
+                'value' => $district->ceo_full_name,
+            ]) ?>
+    </div>
 
-    <?= $form->field($model, 'district_id')->textInput() ?>
+    <div class="col-md-4">
 
-    <?= $form->field($model, 'responsible')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'creator')->textInput() ?>
+        <?= $form->field($model, 'basis_file')->widget(FileInput::classname(), [
+        ]); ?>
 
-    <?= $form->field($model, 'created_at')->textInput() ?>
+    </div>
 
-    <?= $form->field($model, 'modifier')->textInput() ?>
-
-    <?= $form->field($model, 'modified_at')->textInput() ?>
-
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('yii', 'Save'), ['class' => 'btn btn-success']) ?>
+    <div class="form-group col-md-12">
+        <?= Html::submitButton(Yii::t('yii', 'Сақлаш'), ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

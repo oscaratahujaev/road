@@ -2,7 +2,10 @@
 
 namespace app\models;
 
+use app\models\ref\RefMahalla;
 use Yii;
+use yii\helpers\ArrayHelper;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "event".
@@ -12,8 +15,11 @@ use Yii;
  * @property string $realiz_mechanism
  * @property string $result
  * @property resource $basis_file
+ * @property string $basis_filename
+ * @property string $basis_filetype
  * @property string $deadline
  * @property int $event_type_id
+ * @property int $deadline_type
  * @property string $event_number
  * @property int $region_id
  * @property int $district_id
@@ -31,6 +37,20 @@ use Yii;
  */
 class Event extends \yii\db\ActiveRecord
 {
+    public static function getMahalla($mahalla)
+    {
+        $mahalla = json_decode($mahalla);
+//        debug($mahalla);
+        if (!empty($mahalla)) {
+            $model = RefMahalla::find()
+                ->where(['in', 'id', $mahalla])
+                ->all();
+            $model = ArrayHelper::map($model, 'id', 'name');
+            return implode(",",$model);
+        }
+
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -45,9 +65,12 @@ class Event extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'event_type_id', 'creator', 'modifier'], 'required'],
-            [['realiz_mechanism', 'result', 'basis_file'], 'string'],
-            [['deadline'], 'safe'],
+            [['title', 'event_type_id'], 'required'],
+            [['realiz_mechanism', 'result', 'basis_filename', 'basis_filetype'], 'string'],
+
+            ['basis_file', 'file', 'extensions' => 'doc, docx, pdf'],
+
+            [['deadline', 'deadline_type'], 'safe'],
             [['event_type_id', 'region_id', 'district_id', 'creator', 'created_at', 'modifier', 'modified_at'], 'integer'],
             [['title'], 'string', 'max' => 1000],
             [['event_number', 'responsible'], 'string', 'max' => 255],
@@ -62,21 +85,57 @@ class Event extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('yii', 'ID'),
-            'title' => Yii::t('yii', 'Title'),
-            'realiz_mechanism' => Yii::t('yii', 'Realiz Mechanism'),
-            'result' => Yii::t('yii', 'Result'),
-            'basis_file' => Yii::t('yii', 'Basis File'),
-            'deadline' => Yii::t('yii', 'Deadline'),
-            'event_type_id' => Yii::t('yii', 'Event Type ID'),
+            'title' => Yii::t('yii', 'Тадбир номи'),
+            'realiz_mechanism' => Yii::t('yii', 'Амалга ошириш механизми'),
+            'result' => Yii::t('yii', 'Натижа'),
+            'deadline_type' => Yii::t('yii', 'Амалга ошириш муддатлари'),
+            'basis_file' => Yii::t('yii', 'Амалга ошириш учун асос'),
+            'basis_filename' => Yii::t('yii', 'Амалга ошириш учун асос'),
+            'event_type_id' => Yii::t('yii', 'Тадбир тури'),
             'event_number' => Yii::t('yii', 'Event Number'),
             'region_id' => Yii::t('yii', 'Region ID'),
             'district_id' => Yii::t('yii', 'District ID'),
-            'responsible' => Yii::t('yii', 'Responsible'),
+            'responsible' => Yii::t('yii', 'Туман (шахар) хокими'),
             'creator' => Yii::t('yii', 'Creator'),
             'created_at' => Yii::t('yii', 'Created At'),
             'modifier' => Yii::t('yii', 'Modifier'),
             'modified_at' => Yii::t('yii', 'Modified At'),
         ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => \yii\behaviors\TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'modified_at',
+                'value' => function () {
+                    return time();
+                },
+            ],
+        ];
+    }
+
+
+    public function beforeSave($insert)
+    {
+
+        if ($this->isNewRecord) {
+            $user = Yii::$app->user->identity->detail;
+            $this->creator = Yii::$app->user->id;
+            $this->region_id = $user ? $user->region_id : "";
+            $this->district_id = $user ? $user->district_id : "";
+        }
+        $this->modifier = Yii::$app->user->id;
+
+        if ($file = UploadedFile::getInstance($this, 'basis_file')) {
+            $this->basis_filename = $file->name;
+            $this->basis_filetype = $file->type;
+            $this->basis_file = file_get_contents($file->tempName);
+        }
+
+        return parent::beforeSave($insert);
     }
 
     /**

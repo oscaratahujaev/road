@@ -34,7 +34,7 @@ LoginAsset::register($this);
 
 <div class="login-box">
     <div class="login-logo">
-        <b>Admin</b>LTE
+        <b>ЙЎЛ ХАРИТАСИ</b>
     </div>
     <!-- /.login-logo -->
     <?= $content ?>

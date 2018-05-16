@@ -1,6 +1,7 @@
 <?php
 
 /* @var $this \yii\web\View */
+
 /* @var $content string */
 
 use app\assets\MainAsset;
@@ -15,7 +16,7 @@ MainAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html lang="<?= Yii::$app->language ?>">
+<html lang="<?= Yii::$app->language ?>" ng-app="app">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -25,6 +26,7 @@ MainAsset::register($this);
     <?php $this->head() ?>
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
 </head>
 <body class="hold-transition skin-black-light sidebar-mini"><!-- skin-black-light-->
 <?php $this->beginBody() ?>
@@ -64,13 +66,13 @@ MainAsset::register($this);
 
                 <?= Alert::widget() ?>
 
+                <main ng-controller="AppController">
+                    <div class="box-body" style="padding:20px 20px;">
 
-                <div class="box-body" style="padding:20px 20px;">
+                        <?= $content ?>
 
-                    <?= $content ?>
-
-                </div>
-
+                    </div>
+                </main>
             </div>
             <!-- /.box -->
 

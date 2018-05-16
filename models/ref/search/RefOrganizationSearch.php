@@ -8,12 +8,12 @@ use yii\data\ActiveDataProvider;
 use app\models\ref\RefOrganization;
 
 /**
- * RefOrganizationSearch represents the model behind the search form of `app\models\ref\RefOrganization`.
+ * RefOrganizationSearch represents the model behind the search form about `app\models\ref\RefOrganization`.
  */
 class RefOrganizationSearch extends RefOrganization
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function rules()
     {
@@ -24,7 +24,7 @@ class RefOrganizationSearch extends RefOrganization
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function scenarios()
     {
@@ -43,8 +43,6 @@ class RefOrganizationSearch extends RefOrganization
     {
         $query = RefOrganization::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -57,7 +55,6 @@ class RefOrganizationSearch extends RefOrganization
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'creator' => $this->creator,

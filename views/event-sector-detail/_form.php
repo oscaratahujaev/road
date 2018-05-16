@@ -1,5 +1,7 @@
 <?php
 
+use app\models\ref\RefUnitMeasure;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -10,36 +12,67 @@ use yii\widgets\ActiveForm;
 
 <div class="event-sector-detail-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+        'enableClientValidation' => true,
+    ]); ?>
 
-    <?= $form->field($model, 'event_id')->textInput() ?>
+    <?= $form->errorSummary($model) ?>
 
-    <?= $form->field($model, 'sector_id')->textInput() ?>
+    <div class="col-md-4">
+        <?= $form->field($model, 'mahalla_number')->textInput([
+            'type' => 'number',
+            'required' => true,
+        ]) ?>
+    </div>
 
-    <?= $form->field($model, 'mahalla_number')->textInput() ?>
+    <div class="col-md-4">
+        <?= $form->field($model, 'repaired_object')->textInput([
+            'type' => 'number',
+        ]) ?>
+    </div>
+    <div class="col-md-4">
+        <?= $form->field($model, 'employed')->textInput(['type' => 'number']) ?>
+    </div>
+    <div class="clearfix"></div>
 
-    <?= $form->field($model, 'sum')->textInput() ?>
+    <div class="col-md-4">
 
-    <?= $form->field($model, 'sum_unit_id')->textInput() ?>
+        <?= Html::label('«Йўл харитаси» доирасида таъмирланадиган ички йўллар') ?><br>
+        <?= Html::input('number', 'EventSectorDetail[repaired_road]', $model->repaired_road, [
+            'class' => 'form-control',
+            'style' => 'width:70%;float:left',
+        ]) ?>
 
-    <?= $form->field($model, 'repaired_object')->textInput() ?>
+        <?= Html::dropDownList('EventSectorDetail[road_unit_id]', $model->road_unit_id,
+            ArrayHelper::map(RefUnitMeasure::find()->orderBy('id desc')->all(), 'id', 'name'),
+            [
+                'class' => 'form-control',
+                'style' => 'width:29%',
+            ]) ?>
+    </div>
 
-    <?= $form->field($model, 'repaired_road')->textInput() ?>
+    <div class="col-md-8">
 
-    <?= $form->field($model, 'road_unit_id')->textInput() ?>
+        <?= Html::label('«Йўл харитаси»да белгиланган чора-тадбирларни амалга ошириш учун белгиланган молиявий маблағларнинг тахминий ҳажми') ?>
+        <br>
+        <?= Html::input('number', 'EventSectorDetail[sum]', $model->sum, [
+            'class' => 'form-control',
+            'style' => 'width:70%;float:left',
+        ]) ?>
 
-    <?= $form->field($model, 'employed')->textInput() ?>
+        <?= Html::dropDownList('EventSectorDetail[sum_unit_id]', $model->sum_unit_id,
+            ArrayHelper::map(RefUnitMeasure::find()->all(), 'id', 'name'),
+            [
+                'class' => 'form-control',
+                'style' => 'width:29%',
+            ]) ?>
+    </div>
 
-    <?= $form->field($model, 'creator')->textInput() ?>
+    <div class="clearfix"></div>
 
-    <?= $form->field($model, 'created_at')->textInput() ?>
+    <div class="col-md-12" style="margin-top: 20px;">
 
-    <?= $form->field($model, 'modifier')->textInput() ?>
-
-    <?= $form->field($model, 'modified_at')->textInput() ?>
-
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('yii', 'Save'), ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton(Yii::t('yii', 'Сақлаш'), ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

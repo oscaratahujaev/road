@@ -10,7 +10,7 @@ $this->title = Yii::t('yii', 'Update Event Type: ' . $model->name, [
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('yii', 'Event Types'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('yii', 'Update');
+$this->params['breadcrumbs'][] = Yii::t('yii', 'Ўзгартириш');
 ?>
 <div class="event-type-update">
 

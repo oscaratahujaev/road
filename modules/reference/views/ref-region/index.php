@@ -1,41 +1,50 @@
 <?php
-
+use yii\helpers\Url;
 use yii\helpers\Html;
-use yii\grid\GridView;
-use yii\widgets\Pjax;
+use yii\bootstrap\Modal;
+use kartik\grid\GridView;
+use johnitvn\ajaxcrud\CrudAsset; 
+use johnitvn\ajaxcrud\BulkButtonWidget;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ref\search\RefRegionSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('yii', 'Ref Regions');
+$this->title = Yii::t('yii', 'Худуд');
 $this->params['breadcrumbs'][] = $this->title;
+
+CrudAsset::register($this);
+
 ?>
 <div class="ref-region-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::a(Yii::t('yii', 'Create Ref Region'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'name',
-            'founded_year',
-            'ceo_full_name',
-            'work_number',
-            //'address:ntext',
-            //'folder',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
-    <?php Pjax::end(); ?>
+    <div id="ajaxCrudDatatable">
+        <?=GridView::widget([
+            'id'=>'crud-datatable',
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'pjax'=>true,
+            'columns' => require(__DIR__.'/_columns.php'),
+            'toolbar'=> [
+                ['content'=>
+                    Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create'],
+                    ['role'=>'modal-remote','title'=> 'Create new Ref Regions','class'=>'btn btn-default']).
+                    Html::a('<i class="glyphicon glyphicon-repeat"></i>', [''],
+                    ['data-pjax'=>1, 'class'=>'btn btn-default', 'title'=>'Reset Grid']).
+                    '{toggleData}'.
+                    '{export}'
+                ],
+            ],          
+            'striped' => true,
+            'condensed' => true,
+            'responsive' => true,          
+            'panel' => [
+                'type' => 'primary', 
+            ]
+        ])?>
+    </div>
 </div>
+<?php Modal::begin([
+    "id"=>"ajaxCrudModal",
+    "footer"=>"",// always need it for jquery plugin
+])?>
+<?php Modal::end(); ?>

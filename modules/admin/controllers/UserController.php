@@ -2,28 +2,14 @@
 
 namespace app\modules\admin\controllers;
 
-use common\components\Functions;
-use common\models\Reports;
-use common\models\UserReports;
-use app\modules\admin\components\Configs;
-use app\modules\admin\models\AuthItem;
 use app\modules\admin\models\Role;
 use Yii;
-use app\modules\admin\models\form\Login;
-use app\modules\admin\models\form\PasswordResetRequest;
-use app\modules\admin\models\form\ResetPassword;
-use app\modules\admin\models\form\Signup;
-use app\modules\admin\models\form\ChangePassword;
-use common\models\User;
+use app\models\User;
 use app\modules\admin\models\searchs\User as UserSearch;
-use yii\base\InvalidParamException;
-use yii\helpers\Json;
 use yii\helpers\Url;
-use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
-use yii\base\UserException;
 use yii\mail\BaseMailer;
 
 /**

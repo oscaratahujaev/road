@@ -8,12 +8,12 @@ use yii\data\ActiveDataProvider;
 use app\models\ref\RefSector;
 
 /**
- * RefSectorSearch represents the model behind the search form of `app\models\ref\RefSector`.
+ * RefSectorSearch represents the model behind the search form about `app\models\ref\RefSector`.
  */
 class RefSectorSearch extends RefSector
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function rules()
     {
@@ -24,7 +24,7 @@ class RefSectorSearch extends RefSector
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function scenarios()
     {
@@ -43,8 +43,6 @@ class RefSectorSearch extends RefSector
     {
         $query = RefSector::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -57,7 +55,6 @@ class RefSectorSearch extends RefSector
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'district_id' => $this->district_id,

@@ -73,22 +73,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     10 => 'Active'
                 ]
             ],
-            [
-                'attribute' => 'orgId',
-                'value' => function ($model) {
-                    return ($model->org) ? $model->org->Name : "";
-                },
-                'filter' => ArrayHelper::map(RefInsuranceOrgs::find()->all(), 'ID', "Name"),
-            ],
-            [
-                'attribute' => 'region_id',
-                'value' => function ($model) {
-                    return $model->region ? $model->region->Name : "";
-                    //                    return $model->region == 0 ? 'Inactive' : 'Active';
-                },
-                'filter' => ArrayHelper::map(RefRegion::find()->all(), 'ID', "Name"),
-            ],
-
 //            [
 //                'class' => 'yii\grid\ActionColumn',
 //                'template' => Helper::filterActionColumn(['view', 'update', 'delete']),

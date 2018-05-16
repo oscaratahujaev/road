@@ -1,35 +1,45 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\EventSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('yii', 'Events');
+$this->title = Yii::t('yii', 'Тадбирлар');
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="event-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a(Yii::t('yii', 'Create Event'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <div class="overflow:hidden;margin-bottom:30px">
+        <?= Html::a(Yii::t('yii', 'Тадбир қўшиш <i class="fa fa-plus"></i>'), ['create'], ['class' => 'btn btn-success pull-right']) ?>
+    </div>
+    <div class="clearfix"></div>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'pjax' => true,
+        'hover' => true,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'title',
-            'realiz_mechanism:ntext',
-            'result:ntext',
-            'basis_file',
+            [
+                'attribute' => 'title',
+                'contentOptions' => ['style' => 'white-space: normal;'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'vertical-align:middle;'],
+                'format' => 'raw',
+                'value' => function ($data) {
+                    return Html::a(mb_substr($data->title, 0, 150) . "...", ['view', 'id' => $data->id]);
+                }
+            ],
+            //            'realiz_mechanism:ntext',
+            //            'result:ntext',
+            //            'basis_file',
             //'deadline',
             //'event_type_id',
             //'event_number',
@@ -41,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'modifier',
             //'modified_at',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            //            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 </div>

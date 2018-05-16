@@ -62,16 +62,23 @@ class EventSectorDetailController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($eventId, $sectorId)
     {
-        $model = new EventSectorDetail();
+        $model = EventSectorDetail::findOne(['event_id' => $eventId, 'sector_number' => $sectorId]);
+        if (empty($model)) {
+            $model = new EventSectorDetail();
+            $model->event_id = $eventId;
+            $model->sector_number = $sectorId;
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['/event/view', 'id' => $eventId]);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'sectorId' => $sectorId,
+            'eventId' => $eventId,
         ]);
     }
 
@@ -82,18 +89,18 @@ class EventSectorDetailController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
+    //    public function actionUpdate($id)
+    //    {
+    //        $model = $this->findModel($id);
+    //
+    //        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+    //            return $this->redirect(['view', 'id' => $model->id]);
+    //        }
+    //
+    //        return $this->render('update', [
+    //            'model' => $model,
+    //        ]);
+    //    }
 
     /**
      * Deletes an existing EventSectorDetail model.

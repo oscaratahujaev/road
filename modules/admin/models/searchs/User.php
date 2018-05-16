@@ -5,7 +5,7 @@ namespace app\modules\admin\models\searchs;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\User as UserModel;
+use app\models\User as UserModel;
 
 /**
  * User represents the model behind the search form about `app\modules\admin\models\User`.
@@ -18,7 +18,7 @@ class User extends UserModel
     public function rules()
     {
         return [
-            [['id', 'status', 'region_id', 'orgId'], 'integer'],
+            [['id', 'status'], 'integer'],
             [['created_at', 'updated_at', 'fullname'], 'string'],
             [['username', 'auth_key', 'password_hash', 'password_reset_token', 'email'], 'safe'],
         ];
@@ -57,8 +57,6 @@ class User extends UserModel
         $query->andFilterWhere([
             'id' => $this->id,
             'status' => $this->status,
-            'region_id' => $this->region_id,
-            'orgId' => $this->orgId,
             //            'created_at' => $this->created_at,
             //            'updated_at' => $this->updated_at,
         ]);
