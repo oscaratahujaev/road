@@ -13,6 +13,7 @@ use Yii;
  * @property int $event_task_id
  * @property int $sum
  * @property int $sum_unit_id
+ * @property string $source
  * @property int $creator
  * @property int $created_at
  * @property int $modifier
@@ -39,6 +40,9 @@ class TaskFinance extends \yii\db\ActiveRecord
     {
         return [
             [['event_id', 'event_task_id', 'sum', 'sum_unit_id', 'creator', 'created_at', 'modifier', 'modified_at'], 'integer'],
+            ['source', 'string'],
+            ['source', 'required'],
+
             [['event_id'], 'exist', 'skipOnError' => true, 'targetClass' => Event::className(), 'targetAttribute' => ['event_id' => 'id']],
             [['event_task_id'], 'exist', 'skipOnError' => true, 'targetClass' => EventTask::className(), 'targetAttribute' => ['event_task_id' => 'id']],
             [['sum_unit_id'], 'exist', 'skipOnError' => true, 'targetClass' => RefUnitMeasure::className(), 'targetAttribute' => ['sum_unit_id' => 'id']],
@@ -62,6 +66,32 @@ class TaskFinance extends \yii\db\ActiveRecord
             'modified_at' => Yii::t('yii', 'Modified At'),
         ];
     }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => \yii\behaviors\TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'modified_at',
+                'value' => function () {
+                    return time();
+                },
+            ],
+        ];
+    }
+
+
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            $this->creator = Yii::$app->user->id;
+        }
+        $this->modifier = Yii::$app->user->id;
+
+        return parent::beforeSave($insert);
+    }
+
 
     /**
      * @return \yii\db\ActiveQuery

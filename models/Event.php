@@ -2,7 +2,9 @@
 
 namespace app\models;
 
+use app\models\ref\RefMahalla;
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
 
 /**
@@ -35,6 +37,20 @@ use yii\web\UploadedFile;
  */
 class Event extends \yii\db\ActiveRecord
 {
+    public static function getMahalla($mahalla)
+    {
+        $mahalla = json_decode($mahalla);
+//        debug($mahalla);
+        if (!empty($mahalla)) {
+            $model = RefMahalla::find()
+                ->where(['in', 'id', $mahalla])
+                ->all();
+            $model = ArrayHelper::map($model, 'id', 'name');
+            return implode(",",$model);
+        }
+
+    }
+
     /**
      * {@inheritdoc}
      */

@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Event;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -64,10 +65,14 @@ $taskNumber = 1;
                 <?php if ($task['sector'] == $sector): ?>
                     <tr>
                         <td><?= $taskNumber ?></td>
-                        <td><?= implode(",", json_decode($task['mahalla'])) ?></td>
+                        <td><?=  Event::getMahalla($task['mahalla'])?></td>
                         <td><?= $task['title'] ?></td>
                         <td><?= $task['realiz_mechanism'] ?></td>
-                        <td></td>
+                        <td>
+                            <?php foreach ($task['taskFinances'] as $finance): ?>
+                                <?= $finance['sum'] ." ".$finance->sumUnit->name. " (" . $finance['source'] . ")" ?>
+                            <?php endforeach; ?>
+                        </td>
                         <td><?= $task['deadline_date'] ?></td>
                         <td></td>
                     </tr>

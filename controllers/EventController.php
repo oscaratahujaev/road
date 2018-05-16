@@ -57,9 +57,13 @@ class EventController extends Controller
     {
         $sectorDetail = EventSectorDetail::find()->where(['event_id' => $id])->indexBy('sector_number')->asArray()->all();
 
-        $eventTasks = EventTask::findAll(['event_id' => $id]);
-//        debug($eventTasks);
-//        exit;
+        $eventTasks = EventTask::find()
+            ->where(['event_id' => $id])
+            ->with('taskFinances')
+//            ->asArray()
+            ->orderBy('id asc')
+            ->all();
+
         return $this->render('view', [
             'model' => $this->findModel($id),
             'sectorDetail' => $sectorDetail,

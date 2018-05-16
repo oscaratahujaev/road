@@ -13,4 +13,20 @@ $(document).ready(function () {
             $('#deadline-text').removeClass('hidden')
         }
     });
+
+    // $('.add-button').on('click', function () {
+    //     var parent_div = $('.finance').first().clone();
+    //
+    //     $('#finance-table').append(parent_div);
+    //     // $('.my-block').append(parent_div);
+    //     console.log(parent_div[0]);
+    // });
+
+    // $(document).on('click', 'button', function () {
+    //     console.log($(this));
+    //     if ($(this).hasClass('btn-danger')) {
+    //         $(this).parent().parent().remove();
+    //     }
+    // });
 });
+
